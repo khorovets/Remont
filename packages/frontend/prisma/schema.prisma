@@ -109,3 +109,17 @@ model ContractorSkill {
   @@unique([contractor_id, category_id])
   @@map("contractor_skills")
 }
+
+model Portfolio {
+  id            Int      @id @default(autoincrement())
+  contractor_id Int
+  contractor    User     @relation(fields: [contractor_id], references: [id], onDelete: Cascade)
+  category_id   Int
+  category      Category @relation(fields: [category_id], references: [id])
+  photo_url     String
+  description   String?  @db.Text
+  created_at    DateTime @default(now())
+
+  @@map("portfolio")
+}
+
