@@ -220,3 +220,11 @@ model Favorite {
   @@map("favorites")
 }
 
+model FeatureFlag {
+  id         Int      @id @default(autoincrement())
+  key        String   @unique
+  enabled    Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  @@map("feature_flags")
+}
