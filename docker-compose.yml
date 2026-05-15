@@ -1,0 +1,68 @@
+# =============================================================================
+# Docker Compose — локальная разработка (Remont.by)
+# =============================================================================
+#
+# Запуск:
+#   docker compose up -d
+#
+# Остановка:
+#   docker compose down
+#
+# Остановка с удалением данных (volumes):
+#   docker compose down -v
+#
+# Просмотр логов:
+#   docker compose logs -f postgres
+#
+# =============================================================================
+
+version: "3.9"
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL 16
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: remont-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: remont
+      POSTGRES_USER: remont
+      POSTGRES_PASSWORD: remont
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U remont -d remont"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # pgAdmin 4 (опционально) — веб-интерфейс для управления БД
+  # ---------------------------------------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: remont-pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@remont.by
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local

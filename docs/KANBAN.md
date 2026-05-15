@@ -24,7 +24,7 @@
   - Файл: `.env.example`
   - DATABASE_URL, JWT_SECRET, переменные
 
-- [ ] **0.5** Docker Compose для БД
+- [x] **0.5** Docker Compose для БД
   - Файл: `docker-compose.yml`
   - PostgreSQL 16 + pgAdmin, порты, volumes
 
