@@ -255,3 +255,17 @@ model UserSubscription {
 
   @@map("user_subscriptions")
 }
+
+model AdBanner {
+  id         Int       @id @default(autoincrement())
+  title      String?
+  image_url  String
+  link_url   String?
+  placement  String
+  is_active  Boolean   @default(false)
+  starts_at  DateTime?
+  ends_at    DateTime?
+  created_at DateTime  @default(now())
+
+  @@map("ad_banners")
+}
