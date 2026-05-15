@@ -6,10 +6,15 @@
     "build": "turbo build",
     "typecheck": "turbo typecheck",
     "lint": "turbo lint",
+    "format": "prettier --write .",
     "test": "turbo test"
   },
   "devDependencies": {
+    "eslint": "^10.3.0",
+    "eslint-config-next": "^16.2.6",
+    "eslint-config-prettier": "^10.1.8",
     "pnpm": "^8.15.0",
+    "prettier": "^3.8.3",
     "turbo": "^1.13.0"
   }
 }
