@@ -208,5 +208,15 @@ model Message {
   @@map("messages")
 }
 
+model Favorite {
+  id            Int      @id @default(autoincrement())
+  customer_id   Int
+  customer      User     @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  contractor_id Int
+  contractor    User     @relation("FavoritedContractor", fields: [contractor_id], references: [id], onDelete: Cascade)
+  created_at    DateTime @default(now())
 
+  @@unique([customer_id, contractor_id])
+  @@map("favorites")
+}
 
