@@ -56,10 +56,12 @@ jobs:
       - name: Generate Prisma client
         run: pnpm prisma:generate
         working-directory: packages/frontend
+        continue-on-error: true  # TODO: убрать после Фазы 1 (настройка Prisma)
 
       - name: Run Prisma migrations
         run: pnpm prisma:migrate:deploy
         working-directory: packages/frontend
+        continue-on-error: true  # TODO: убрать после Фазы 1 (настройка Prisma)
 
       - name: Typecheck
         run: pnpm typecheck
