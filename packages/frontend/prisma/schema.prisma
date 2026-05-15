@@ -104,6 +104,7 @@ model Category {
   skills    ContractorSkill[]
   portfolio Portfolio[]
   orders    Order[]
+  reviews   Review[]
 
   @@map("categories")
 }
@@ -175,5 +176,23 @@ model OrderResponse {
   @@unique([order_id, contractor_id])
   @@map("order_responses")
 }
+
+model Review {
+  id            Int       @id @default(autoincrement())
+  order_id      Int
+  order         Order     @relation(fields: [order_id], references: [id])
+  customer_id   Int
+  customer      User      @relation("ReviewAuthor", fields: [customer_id], references: [id])
+  contractor_id Int
+  contractor    User      @relation("ReviewTarget", fields: [contractor_id], references: [id])
+  category_id   Int
+  category      Category  @relation(fields: [category_id], references: [id])
+  rating        Int
+  text          String?   @db.Text
+  created_at    DateTime  @default(now())
+
+  @@map("reviews")
+}
+
 
 
