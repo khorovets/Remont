@@ -4,7 +4,6 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -86,6 +85,7 @@ model City {
   region     Region @relation(fields: [region_id], references: [id])
   sort_order Int    @default(0)
   users      User[]
+  orders     Order[]
 
   @@map("cities")
 }
