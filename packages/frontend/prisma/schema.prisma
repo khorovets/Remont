@@ -54,3 +54,25 @@ model User {
 
   @@map("users")
 }
+
+model Region {
+  id         Int    @id @default(autoincrement())
+  name       String
+  slug       String @unique
+  sort_order Int    @default(0)
+  cities     City[]
+
+  @@map("regions")
+}
+
+model City {
+  id         Int    @id @default(autoincrement())
+  name       String
+  slug       String @unique
+  region_id  Int
+  region     Region @relation(fields: [region_id], references: [id])
+  sort_order Int    @default(0)
+  users      User[]
+
+  @@map("cities")
+}
