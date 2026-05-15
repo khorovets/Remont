@@ -1,0 +1,56 @@
+// =============================================================================
+// Prisma Schema — Remont.by
+// =============================================================================
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// =============================================================================
+// Enums
+// =============================================================================
+
+enum Role {
+  CUSTOMER
+  CONTRACTOR
+}
+
+// =============================================================================
+// Models
+// =============================================================================
+
+model User {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  password_hash  String
+  role           Role      @default(CUSTOMER)
+  first_name     String?
+  last_name      String?
+  phone          String?
+  avatar_url     String?
+  city_id        Int?
+  city           City?     @relation(fields: [city_id], references: [id])
+  about          String?   @db.Text
+  experience_years Int?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  skills            ContractorSkill[]
+  portfolio         Portfolio[]
+  orders            Order[]
+  responses         OrderResponse[]
+  reviews_given     Review[]          @relation("ReviewAuthor")
+  reviews_received  Review[]          @relation("ReviewTarget")
+  favorites         Favorite[]
+  favorited_by      Favorite[]        @relation("FavoritedContractor")
+  user_subscriptions UserSubscription[]
+  messages_sent     Message[]         @relation("MessageSender")
+  messages_received Message[]         @relation("MessageReceiver")
+
+  @@map("users")
+}
