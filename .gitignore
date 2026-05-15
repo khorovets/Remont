@@ -1,0 +1,43 @@
+# =============================================================================
+# Git ignore — Remont
+# =============================================================================
+
+# --- Зависимости ---
+node_modules/
+
+# --- Переменные окружения ---
+.env
+.env.*.local
+
+# --- Next.js ---
+.next/
+
+# --- Production-сборка ---
+dist/
+build/
+
+# --- Turbo (монорепа) ---
+.turbo/
+
+# --- Загруженные файлы ---
+public/uploads/
+
+# --- Тесты ---
+coverage/
+test-results/
+playwright-report/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- TypeScript ---
+*.tsbuildinfo
