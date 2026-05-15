@@ -18,6 +18,8 @@ set -euo pipefail
 
 MODE="${1:-loop}"  # loop | once
 SLEEP_INTERVAL="${SLEEP_INTERVAL:-10}"
+KANBAN_BIN="${KANBAN_BIN:-/opt/homebrew/Cellar/node/24.7.0/bin/node /opt/homebrew/bin/kanban}"
+PROJECT_PATH="${PROJECT_PATH:-/Users/igorkhorovets/Remont}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -43,6 +45,8 @@ if [[ "${MODE}" == "--help" ]] || [[ "${MODE}" == "-h" ]]; then
   echo ""
   echo "Env vars:"
   echo "  SLEEP_INTERVAL  Интервал между проверками в секундах (по умолчанию: 10)"
+  echo "  KANBAN_BIN      Полный путь к Kanban CLI (по умолчанию: /opt/homebrew/Cellar/node/...)"
+  echo "  PROJECT_PATH    Путь к проекту (по умолчанию: /Users/igorkhorovets/Remont)"
   exit 0
 fi
 
@@ -54,9 +58,9 @@ fi
 # ------------------------------------------------------------------
 # Проверка наличия Kanban CLI
 # ------------------------------------------------------------------
-if ! command -v task &>/dev/null; then
-  log_error "Kanban CLI (task) не найден в PATH"
-  log_error "Установите Kanban CLI: npm install -g <kanban-cli-package>"
+if ! $KANBAN_BIN --version &>/dev/null; then
+  log_error "Kanban CLI не найден по пути: ${KANBAN_BIN}"
+  log_error "Проверьте переменную KANBAN_BIN или установите Kanban CLI"
   exit 1
 fi
 
@@ -66,7 +70,7 @@ fi
 do_pass() {
   log_info "Запрашиваю задачи в колонке review..."
 
-  TASK_IDS=$(task list --column review 2>/dev/null || echo "")
+  TASK_IDS=$($KANBAN_BIN task list --column review --project-path "$PROJECT_PATH" 2>/dev/null || echo "")
 
   if [[ -z "${TASK_IDS}" ]]; then
     log_info "Нет задач в колонке review"
@@ -86,7 +90,7 @@ do_pass() {
     fi
 
     log_info "Апрувлю задачу #${TASK_ID}..."
-    if task done --task-id "${TASK_ID}" 2>&1; then
+    if $KANBAN_BIN task done --task-id "${TASK_ID}" --project-path "$PROJECT_PATH" 2>&1; then
       log_ok "Задача #${TASK_ID} отмечена как выполненная"
       ((count++)) || true
     else
