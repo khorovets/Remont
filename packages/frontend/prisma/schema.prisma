@@ -228,3 +228,30 @@ model FeatureFlag {
 
   @@map("feature_flags")
 }
+
+model Subscription {
+  id             Int                @id @default(autoincrement())
+  name           String
+  price          Int
+  duration_days  Int
+  features       Json               @default("[]")
+  created_at     DateTime           @default(now())
+
+  user_subscriptions UserSubscription[]
+
+  @@map("subscriptions")
+}
+
+model UserSubscription {
+  id              Int          @id @default(autoincrement())
+  user_id         Int
+  user            User         @relation(fields: [user_id], references: [id])
+  subscription_id Int
+  subscription    Subscription @relation(fields: [subscription_id], references: [id])
+  starts_at       DateTime     @default(now())
+  expires_at      DateTime
+  is_active       Boolean      @default(true)
+  created_at      DateTime     @default(now())
+
+  @@map("user_subscriptions")
+}
