@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { regions, cities } from './seed-regions';
 
 // =============================================================================
 // Seed: Categories (13 groups + 97 categories)
@@ -215,7 +216,54 @@ async function main(): Promise<void> {
   }
 
   console.log(`\n  ✅ ${categories.length} categories upserted.\n`);
-  console.log('🎉 Categories seeding complete!');
+  console.log('🎉 Categories seeding complete!\n');
+
+  // ----- 3. Upsert regions -----
+  console.log('🌱 Seeding regions...\n');
+
+  const regionIds = new Map<string, number>();
+
+  for (const r of regions) {
+    const row = await prisma.region.upsert({
+      where: { slug: r.slug },
+      update: { name: r.name, sort_order: r.sort_order },
+      create: {
+        name: r.name,
+        slug: r.slug,
+        sort_order: r.sort_order,
+      },
+    });
+    regionIds.set(r.slug, row.id);
+    console.log(`  [region] ${r.name}  (id=${row.id})`);
+  }
+
+  console.log(`\n  ✅ ${regions.length} regions upserted.\n`);
+
+  // ----- 4. Upsert cities -----
+  console.log('🌱 Seeding cities...\n');
+
+  for (const c of cities) {
+    const regionId = regionIds.get(c.regionSlug);
+    if (regionId === undefined) {
+      console.warn(`  ⚠️  Region slug "${c.regionSlug}" not found — skipping "${c.name}"`);
+      continue;
+    }
+
+    await prisma.city.upsert({
+      where: { slug: c.slug },
+      update: { name: c.name, region_id: regionId, sort_order: c.sort_order },
+      create: {
+        name: c.name,
+        slug: c.slug,
+        region_id: regionId,
+        sort_order: c.sort_order,
+      },
+    });
+    console.log(`  [city]  ${c.name}`);
+  }
+
+  console.log(`\n  ✅ ${cities.length} cities upserted.\n`);
+  console.log('🎉 Regions & cities seeding complete!');
 }
 
 main()
