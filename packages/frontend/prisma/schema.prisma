@@ -194,5 +194,19 @@ model Review {
   @@map("reviews")
 }
 
+model Message {
+  id          Int      @id @default(autoincrement())
+  sender_id   Int
+  sender      User     @relation("MessageSender", fields: [sender_id], references: [id])
+  receiver_id Int
+  receiver    User     @relation("MessageReceiver", fields: [receiver_id], references: [id])
+  order_id    Int?
+  text        String   @db.Text
+  is_read     Boolean  @default(false)
+  created_at  DateTime @default(now())
+
+  @@map("messages")
+}
+
 
 
