@@ -658,9 +658,11 @@
 
 ## Фаза 25. Деплой
 
-- [ ] **25.1** Конфигурация CI/CD (GitHub Actions)
+- [x] **25.1** Конфигурация CI/CD (GitHub Actions)
   - Файл: `.github/workflows/ci.yml`
-  - Шаги: lint, typecheck, test (опционально build)
+  - Шаги: checkout → setup pnpm → install → typecheck → lint → test
+  - Review agent: `scripts/review-and-merge.sh` (авто-апрув + squash merge)
+  - Документация: `docs/CI_CD.md` (branch protection, токен, вмешательство человека)
 
 - [ ] **25.2** Подготовка к деплою
   - Проверка .env, настройка CORS, проверка безопасности
