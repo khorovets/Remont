@@ -6,23 +6,29 @@
 > После пуша **обязательно проверить CI** (`gh run list --limit 1`).
 > **Только после зелёного CI** переходить к следующей задаче/фазе.
 
+
+> Каждая выполненная задача ОБЯЗАТЕЛЬНО отмечается [x] в этом документе после того как:
+> 1. Код смержен в main
+> 2. CI на GitHub зелёный (gh run list --limit 1)
+> Без зелёного CI — задача НЕ считается выполненной и [x] НЕ ставится.
+
 ---
 
 ## Фаза 0. Инфраструктура проекта
 
-- [ ] **0.1** Инициализация монорепо (pnpm workspaces)
+- [x] **0.1** Инициализация монорепо (pnpm workspaces)
   - Файлы: `package.json`, `pnpm-workspace.yaml`, `turbo.json`
   - Создать корневой package.json с workspaces
 
-- [ ] **0.2** Конфигурация TypeScript
+- [x] **0.2** Конфигурация TypeScript
   - Файлы: `tsconfig.base.json`, `packages/shared/tsconfig.json`, `packages/frontend/tsconfig.json`
   - Общий базовый tsconfig + расширения для shared и frontend
 
-- [ ] **0.3** ESLint + Prettier
+- [x] **0.3** ESLint + Prettier
   - Файлы: `.eslintrc.js`, `.prettierrc`, `.eslintignore`, `.prettierignore`
   - Конфиг ESLint для Next.js + TypeScript
 
-- [ ] **0.4** Переменные окружения
+- [x] **0.4** Переменные окружения
   - Файл: `.env.example`
   - DATABASE_URL, JWT_SECRET, переменные
 
@@ -30,23 +36,23 @@
   - Файл: `docker-compose.yml`
   - PostgreSQL 16 + pgAdmin, порты, volumes
 
-- [ ] **0.6** Инициализация пакета shared
+- [x] **0.6** Инициализация пакета shared
   - Файл: `packages/shared/package.json`
   - Пустая точка входа, экспорт
 
-- [ ] **0.7** Инициализация Next.js приложения
+- [x] **0.7** Инициализация Next.js приложения
   - Файлы: `packages/frontend/package.json`, `next.config.js`, `tailwind.config.ts`, `postcss.config.js`
   - Next.js 14, Tailwind CSS, shadcn/ui config
 
-- [ ] **0.8** Структура папок проекта
+- [x] **0.8** Структура папок проекта
   - Создать все директории согласно ARCHITECTURE.md
   - Директории: `src/app/(public)/`, `src/app/(dashboard)/`, `src/components/ui/`, `src/components/layout/`, `src/components/contractors/`, `src/components/orders/`, `src/components/portfolio/`, `src/components/auth/`, `src/components/shared/`, `src/hooks/`, `src/lib/`, `src/styles/`
 
-- [ ] **0.9** README.md с инструкцией по запуску
+- [x] **0.9** README.md с инструкцией по запуску
   - Файл: `README.md`
   - Описание проекта, как развернуть, как запустить, ссылки на документацию
 
-- [ ] **0.10** Глобальные стили Tailwind
+- [x] **0.10** Глобальные стили Tailwind
   - Файл: `packages/frontend/src/styles/globals.css`
   - Tailwind директивы, базовые стили, переменные
 
@@ -54,71 +60,71 @@
 
 ## Фаза 1. База данных (Prisma)
 
-- [ ] **1.1** Prisma модель User + Role enum
+- [x] **1.1** Prisma модель User + Role enum
   - Файл: `packages/frontend/prisma/schema.prisma`
   - Модель User со всеми полями согласно DATA_MODEL.md
 
-- [ ] **1.2** Prisma модель Region + City
+- [x] **1.2** Prisma модель Region + City
   - Добавить в schema.prisma
   - Модели Region и City
 
-- [ ] **1.3** Prisma модель Category
+- [x] **1.3** Prisma модель Category
   - Добавить в schema.prisma
   - Модель Category с parent_id (дерево)
 
-- [ ] **1.4** Prisma модель ContractorSkill
+- [x] **1.4** Prisma модель ContractorSkill
   - Добавить в schema.prisma
   - Связь User ↔ Category, поля rating, reviews_count
 
-- [ ] **1.5** Prisma модель Portfolio
+- [x] **1.5** Prisma модель Portfolio
   - Добавить в schema.prisma
   - Связь User ↔ Category, поле photo_url
 
-- [ ] **1.6** Prisma модель Order + OrderStatus enum
+- [x] **1.6** Prisma модель Order + OrderStatus enum
   - Добавить в schema.prisma
   - Модель Order со всеми полями
 
-- [ ] **1.7** Prisma модель OrderResponse + ResponseStatus enum
+- [x] **1.7** Prisma модель OrderResponse + ResponseStatus enum
   - Добавить в schema.prisma
   - Модель OrderResponse
 
-- [ ] **1.8** Prisma модель Review
+- [x] **1.8** Prisma модель Review
   - Добавить в schema.prisma
   - Модель Review
 
-- [ ] **1.9** Prisma модель Message (закладка)
+- [x] **1.9** Prisma модель Message (закладка)
   - Добавить в schema.prisma
   - Модель Message для чата
 
-- [ ] **1.10** Prisma модель Favorite
+- [x] **1.10** Prisma модель Favorite
   - Добавить в schema.prisma
   - Модель Favorite (избранное)
 
-- [ ] **1.11** Prisma модель FeatureFlag
+- [x] **1.11** Prisma модель FeatureFlag
   - Добавить в schema.prisma
   - Модель FeatureFlag
 
-- [ ] **1.12** Prisma модель Subscription + UserSubscription (закладка)
+- [x] **1.12** Prisma модель Subscription + UserSubscription (закладка)
   - Добавить в schema.prisma
   - Обе модели
 
-- [ ] **1.13** Prisma модель AdBanner (закладка)
+- [x] **1.13** Prisma модель AdBanner (закладка)
   - Добавить в schema.prisma
   - Модель AdBanner
 
-- [ ] **1.14** Первая миграция
+- [x] **1.14** Первая миграция
   - Команда: `npx prisma migrate dev --name init`
   - Проверить что все таблицы создались
 
-- [ ] **1.15** Prisma Client инициализация
+- [x] **1.15** Prisma Client инициализация
   - Файл: `packages/frontend/src/lib/prisma.ts`
   - Singleton PrismaClient
 
-- [ ] **1.16** Сидер категорий
+- [x] **1.16** Сидер категорий
   - Файл: `packages/frontend/prisma/seed.ts`
   - Заполнить 13 групп + ~80 категорий из CATEGORIES.md
 
-- [ ] **1.17** Сидер регионов и городов
+- [x] **1.17** Сидер регионов и городов
   - Добавить в seed.ts
   - Заполнить 7 регионов + ~110 городов из CITIES.md
 
@@ -126,47 +132,47 @@
 
 ## Фаза 2. Общие типы и схемы (пакет shared)
 
-- [ ] **2.1** Типы пользователя и ролей
+- [x] **2.1** Типы пользователя и ролей
   - Файл: `packages/shared/src/types/user.ts`
   - User, Role, безопасный тип (без password_hash)
 
-- [ ] **2.2** Типы категорий, городов, регионов
+- [x] **2.2** Типы категорий, городов, регионов
   - Файл: `packages/shared/src/types/dictionaries.ts`
   - Category, City, Region
 
-- [ ] **2.3** Типы заказов и откликов
+- [x] **2.3** Типы заказов и откликов
   - Файл: `packages/shared/src/types/order.ts`
   - Order, OrderResponse, статусы
 
-- [ ] **2.4** Типы портфолио, отзывов, избранного
+- [x] **2.4** Типы портфолио, отзывов, избранного
   - Файл: `packages/shared/src/types/portfolio.ts`
   - Portfolio, Review, Favorite
 
-- [ ] **2.5** Типы API-ответов
+- [x] **2.5** Типы API-ответов
   - Файл: `packages/shared/src/types/api.ts`
   - ApiResponse<T>, ApiError, PaginatedResponse<T>
 
-- [ ] **2.6** Константы (роли, статусы)
+- [x] **2.6** Константы (роли, статусы)
   - Файл: `packages/shared/src/constants/index.ts`
   - ROLE, ORDER_STATUS, RESPONSE_STATUS
 
-- [ ] **2.7** Zod-схема регистрации
+- [x] **2.7** Zod-схема регистрации
   - Файл: `packages/shared/src/schemas/auth.ts`
   - registerSchema, loginSchema
 
-- [ ] **2.8** Zod-схема профиля и компетенций
+- [x] **2.8** Zod-схема профиля и компетенций
   - Файл: `packages/shared/src/schemas/profile.ts`
   - updateProfileSchema, skillsSchema
 
-- [ ] **2.9** Zod-схема заказа и отклика
+- [x] **2.9** Zod-схема заказа и отклика
   - Файл: `packages/shared/src/schemas/order.ts`
   - createOrderSchema, respondSchema
 
-- [ ] **2.10** Zod-схема отзыва
+- [x] **2.10** Zod-схема отзыва
   - Файл: `packages/shared/src/schemas/review.ts`
   - createReviewSchema
 
-- [ ] **2.11** Баррель-экспорт shared
+- [x] **2.11** Баррель-экспорт shared
   - Файл: `packages/shared/src/index.ts`
   - Экспортировать все типы, схемы, константы
 
@@ -174,35 +180,35 @@
 
 ## Фаза 3. Утилиты и middleware
 
-- [ ] **3.1** JWT-утилиты (создание и проверка токена)
+- [x] **3.1** JWT-утилиты (создание и проверка токена)
   - Файл: `packages/frontend/src/lib/jwt.ts`
   - Функции createToken, verifyToken (jose)
 
-- [ ] **3.2** Хеширование паролей
+- [x] **3.2** Хеширование паролей
   - Файл: `packages/frontend/src/lib/password.ts`
   - Функции hashPassword, comparePassword (bcrypt)
 
-- [ ] **3.3** API-клиент (fetch-обёртка)
+- [x] **3.3** API-клиент (fetch-обёртка)
   - Файл: `packages/frontend/src/lib/api.ts`
   - Функция apiClient с автоподстановкой JWT и обработкой ошибок
 
-- [ ] **3.4** Утилита форматирования цены
+- [x] **3.4** Утилита форматирования цены
   - Файл: `packages/frontend/src/lib/utils.ts`
   - formatPrice (BYN), formatDate, cn (classnames)
 
-- [ ] **3.5** Auth middleware для API-роутов
+- [x] **3.5** Auth middleware для API-роутов
   - Файл: `packages/frontend/src/lib/auth-middleware.ts`
   - Функция getAuthUser — извлекает user из JWT из заголовка
 
-- [ ] **3.6** Middleware проверки роли
+- [x] **3.6** Middleware проверки роли
   - Файл: `packages/frontend/src/lib/role-middleware.ts`
   - Функция requireRole(role) — выбрасывает 403 если роль не та
 
-- [ ] **3.7** Zod-валидация тела запроса
+- [x] **3.7** Zod-валидация тела запроса
   - Файл: `packages/frontend/src/lib/validate.ts`
   - Функция validateBody(schema) — парсит и возвращает данные или ошибку
 
-- [ ] **3.8** Ответ API (хелпер)
+- [x] **3.8** Ответ API (хелпер)
   - Файл: `packages/frontend/src/lib/response.ts`
   - Функции successResponse(data, status), errorResponse(code, message, status)
 
@@ -210,15 +216,15 @@
 
 ## Фаза 4. API — Аутентификация
 
-- [ ] **4.1** POST /api/v1/auth/register
+- [x] **4.1** POST /api/v1/auth/register
   - Файл: `packages/frontend/src/app/api/v1/auth/register/route.ts`
   - Регистрация: валидация, проверка дубликата email, хеширование пароля, создание user, возврат JWT
 
-- [ ] **4.2** POST /api/v1/auth/login
+- [x] **4.2** POST /api/v1/auth/login
   - Файл: `packages/frontend/src/app/api/v1/auth/login/route.ts`
   - Логин: проверка email+пароль, возврат JWT
 
-- [ ] **4.3** GET /api/v1/auth/me
+- [x] **4.3** GET /api/v1/auth/me
   - Файл: `packages/frontend/src/app/api/v1/auth/me/route.ts`
   - Возврат текущего пользователя по JWT
 
@@ -226,19 +232,19 @@
 
 ## Фаза 5. API — Справочники
 
-- [ ] **5.1** GET /api/v1/categories
+- [x] **5.1** GET /api/v1/categories
   - Файл: `packages/frontend/src/app/api/v1/categories/route.ts`
   - Список категорий, опциональный фильтр по group_id
 
-- [ ] **5.2** GET /api/v1/categories/groups
+- [x] **5.2** GET /api/v1/categories/groups
   - Файл: `packages/frontend/src/app/api/v1/categories/groups/route.ts`
   - Только группы (13 штук)
 
-- [ ] **5.3** GET /api/v1/cities
+- [x] **5.3** GET /api/v1/cities
   - Файл: `packages/frontend/src/app/api/v1/cities/route.ts`
   - Список городов с фильтром по region_id и поиском
 
-- [ ] **5.4** GET /api/v1/regions
+- [x] **5.4** GET /api/v1/regions
   - Файл: `packages/frontend/src/app/api/v1/regions/route.ts`
   - Список областей (7)
 
