@@ -7,8 +7,7 @@
     "typecheck": "turbo typecheck",
     "lint": "turbo lint",
     "format": "prettier --write .",
-    "test": "turbo test",
-    "auto-approve": "bash scripts/auto-approve.sh"
+    "test": "turbo test"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

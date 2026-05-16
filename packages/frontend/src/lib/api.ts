@@ -60,11 +60,11 @@ function extractErrorMessage(body: unknown, status: number): string {
 // =============================================================================
 
 interface ApiClient {
-  <T>(url: string, options?: RequestInit): Promise<ApiResponse<T>>;
-  get<T>(url: string): Promise<ApiResponse<T>>;
-  post<T>(url: string, body: unknown): Promise<ApiResponse<T>>;
-  patch<T>(url: string, body: unknown): Promise<ApiResponse<T>>;
-  delete<T>(url: string): Promise<ApiResponse<T>>;
+  <T>(_url: string, _options?: RequestInit): Promise<ApiResponse<T>>;
+  get<T>(_url: string): Promise<ApiResponse<T>>;
+  post<T>(_url: string, _body: unknown): Promise<ApiResponse<T>>;
+  patch<T>(_url: string, _body: unknown): Promise<ApiResponse<T>>;
+  delete<T>(_url: string): Promise<ApiResponse<T>>;
 }
 
 // =============================================================================
