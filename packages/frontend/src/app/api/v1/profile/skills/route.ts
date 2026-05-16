@@ -76,26 +76,22 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
       return errorResponse('VALIDATION_ERROR', parsed.error.message, 400);
     }
 
-    // 4. Удалить все существующие компетенции и создать новые (в транзакции)
-    const result = await prisma.$transaction(async (tx: typeof prisma) => {
-      // Удалить все существующие
-      const deleted = await tx.contractorSkill.deleteMany({
-        where: { contractor_id: authUser.userId },
-      });
-
-      // Создать новые
-      await tx.contractorSkill.createMany({
-        data: parsed.data.category_ids.map((category_id) => ({
-          contractor_id: authUser.userId,
-          category_id,
-        })),
-      });
-
-      return {
-        added: parsed.data.category_ids.length,
-        removed: deleted.count,
-      };
+    // 4. Удалить все существующие компетенции и создать новые
+    const deleted = await prisma.contractorSkill.deleteMany({
+      where: { contractor_id: authUser.userId },
     });
+
+    await prisma.contractorSkill.createMany({
+      data: parsed.data.category_ids.map((category_id) => ({
+        contractor_id: authUser.userId,
+        category_id,
+      })),
+    });
+
+    const result = {
+      added: parsed.data.category_ids.length,
+      removed: deleted.count,
+    };
 
     // 5. Вернуть успешный ответ
     return successResponse(result);
