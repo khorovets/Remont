@@ -1,7 +1,7 @@
 import type { NextRequest, NextResponse } from 'next/server';
 
 import { prisma } from '@/lib/prisma';
-import { successResponse, errorResponse, internalError } from '@/lib/response';
+import { successResponse, internalError } from '@/lib/response';
 
 // =============================================================================
 // GET /api/v1/regions — список областей (6 областей + г. Минск = 7)
