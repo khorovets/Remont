@@ -70,36 +70,53 @@ fi
 do_pass() {
   log_info "Запрашиваю задачи в колонке review..."
 
-  TASK_IDS=$($KANBAN_BIN task list --column review --project-path "$PROJECT_PATH" 2>/dev/null || echo "")
+  JSON_OUTPUT=$($KANBAN_BIN task list --column review --project-path "$PROJECT_PATH" 2>/dev/null || echo "{}")
 
-  if [[ -z "${TASK_IDS}" ]]; then
+  if [[ -z "${JSON_OUTPUT}" ]] || [[ "${JSON_OUTPUT}" == "{}" ]]; then
+    log_warn "Пустой ответ от Kanban CLI — пропускаю проход"
+    return 0
+  fi
+
+  # Проверяем, что JSON валидный и ok: true
+  if ! echo "$JSON_OUTPUT" | python3 -c "import sys,json; d=json.load(sys.stdin); sys.exit(0 if d.get('ok') else 1)" 2>/dev/null; then
+    log_error "Kanban CLI вернул ошибку в JSON (ok != true) или JSON невалидный"
+    return 0
+  fi
+
+  # Извлекаем массив tasks и считаем количество
+  local count
+  count=$(echo "$JSON_OUTPUT" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('count',0))" 2>/dev/null || echo "0")
+
+  if [[ "${count}" == "0" ]]; then
     log_info "Нет задач в колонке review"
     return 0
   fi
 
-  # task list --column review выводит ID задач (по одному на строку или через пробел)
-  # Парсим вывод — ожидаем строки с ID задач
-  local count=0
-  while IFS= read -r line; do
-    # Пропускаем пустые строки и заголовки
-    [[ -z "${line}" ]] && continue
-    # Извлекаем ID задачи (первое слово строки)
-    TASK_ID=$(echo "${line}" | awk '{print $1}')
-    if [[ -z "${TASK_ID}" ]]; then
-      continue
-    fi
+  log_info "Найдено задач в review: ${count}"
+
+  # Парсим JSON, извлекаем ID задач (по одному на строку)
+  TASK_IDS=$(echo "$JSON_OUTPUT" | python3 -c "import sys,json; d=json.load(sys.stdin); print(chr(10).join([t['id'] for t in d.get('tasks',[])]))" 2>/dev/null || echo "")
+
+  if [[ -z "${TASK_IDS}" ]]; then
+    log_warn "Не удалось извлечь ID задач из JSON"
+    return 0
+  fi
+
+  local approved=0
+  while IFS= read -r TASK_ID; do
+    [[ -z "${TASK_ID}" ]] && continue
 
     log_info "Апрувлю задачу #${TASK_ID}..."
     if $KANBAN_BIN task done --task-id "${TASK_ID}" --project-path "$PROJECT_PATH" 2>&1; then
       log_ok "Задача #${TASK_ID} отмечена как выполненная"
-      ((count++)) || true
+      ((approved++)) || true
     else
       log_warn "Не удалось апрувнуть задачу #${TASK_ID}"
     fi
   done <<< "${TASK_IDS}"
 
-  if [[ ${count} -gt 0 ]]; then
-    log_ok "Апрувнуто задач: ${count}"
+  if [[ ${approved} -gt 0 ]]; then
+    log_ok "Апрувнуто задач: ${approved}"
   fi
 }
 
